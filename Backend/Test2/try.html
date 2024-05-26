@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+</head>
+<body>
+    <h2>Upload Image</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/png, image/jpeg">
+        <br><br>
+        <button type="button" onclick="uploadImage()">Upload Image</button>
+    </form>
+
+    <script>
+        function uploadImage() {
+            var form = document.getElementById("uploadForm");
+            var formData = new FormData(form);
+
+            // Get JWT token from wherever you are storing it (localStorage, cookies, etc.)
+            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxNjY2NzU3MCwianRpIjoiMDdlMDA2MTUtNGMwZS00YjFlLWI5NjUtYTYzOTM3M2RiOTNkIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImthcnRoaWtleWFuLnJhbmFzdGhhbGFAZ21haWwuY29tIiwibmJmIjoxNzE2NjY3NTcwLCJjc3JmIjoiNjcyNWNmMGUtMTgwMS00YTMyLWFkMTQtNGU2NTU1MzYxZTliIiwiZXhwIjoxNzE2NjY4NDcwfQ.8O0Wk3YkFXQdwhRZN0T8ze_w3k1La5eoax4svEWnDPw"
+            console.log(formData)  
+            // Set the Authorization header with the JWT token
+            var headers = new Headers();
+            headers.append("Authorization", "Bearer " + token);
+
+            // Fetch request to upload the image with authorization header
+            fetch("http://127.0.0.1:5000/animals", {
+                method: "POST",
+                headers: headers,
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                // Handle response data if needed
+            })
+            .catch(error => {
+                console.error("There was a problem with the fetch operation:", error);
+            });
+        }
+    </script>
+</body>
+</html>
