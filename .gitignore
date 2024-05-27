@@ -1,0 +1,9 @@
+# Ignore the config.py file in the config directory
+Backend/Test2/config.py
+
+# Other common ignores
+*.pyc
+__pycache__/
+*.log
+*.env
+.env

@@ -52,7 +52,6 @@ def plantDetect(file_path):
     for class_name, index in class_indices.items():
         if index == predicted_class:
             prediction = class_name
-    print("class of plant: ",class_name)        
+    # print("class of plant: ",class_name)        
     # return jsonify({'prediction': prediction})
     return prediction
-

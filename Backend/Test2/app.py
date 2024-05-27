@@ -17,7 +17,7 @@ import textwrap
 from google.generativeai import GenerativeModel
 model = GenerativeModel("gemini-pro")
 import google.generativeai as genai
-
+import config
 from IPython.display import display
 from IPython.display import Markdown
 
@@ -27,9 +27,9 @@ import cloudinary.api
 # import cloudinary_config
 
 cloudinary.config(
-  cloud_name = 'ddk3p3a2g',
-  api_key = '195759785195219',
-  api_secret = 'WaxgM7f1aiGj1DxK-TovgwmikwY'
+  cloud_name = config.CLOUDINARY_CLOUD_NAME,
+  api_key = config.CLOUDINARY_API_KEY,
+  api_secret = config.CLOUDINARY_API_SECRET
 )
 
 def get_user_id_by_email(email):
@@ -43,7 +43,7 @@ def get_user_id_by_email(email):
 
 def generate_content(species):
     print("generating for:",species)
-    API_KEY="AIzaSyA3EHDClVvc8lJUxoqlWEveucIIoF0HiCo"
+    API_KEY=config.GENAI_API_KEY
     data = {
     "contents": [
         {
@@ -62,7 +62,7 @@ def generate_content(species):
 
 def generate_content2(species):
     print("generating for:",species)
-    API_KEY="AIzaSyA3EHDClVvc8lJUxoqlWEveucIIoF0HiCo"
+    API_KEY=config.GENAI_API_KEY
     data = {
     "contents": [
         {
@@ -96,14 +96,14 @@ app = Flask(__name__)
 CORS(app)
 
 # MySQL configurations
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '123456'
-app.config['MYSQL_DB'] = 'flask_auth'
+app.config['MYSQL_HOST'] = config.MYSQL_HOST
+app.config['MYSQL_USER'] = config.MYSQL_USER
+app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
+app.config['MYSQL_DB'] = config.MYSQL_DB
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 # JWT configuration
-app.config['JWT_SECRET_KEY'] = '123'
+app.config['JWT_SECRET_KEY'] = config.JWT_SECRET_KEY
 
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
@@ -211,7 +211,14 @@ def animals():
         print(f"An error occurred: {e}")   
     
     cur = mysql.connection.cursor()
-    link1, link2 = search_serpapi(output_string+" animal")
+    link1=""
+    link2=""
+    ans = search_serpapi(output_string+" animal")
+    print(ans)
+    if(len(ans)==2):
+        link1,link2=ans
+    else:
+        link1=ans[0]    
     print(link1)
     print(link2)
     id=get_user_id_by_email(current_user_email)
@@ -278,7 +285,7 @@ def plants():
     cur = mysql.connection.cursor()
     link1=""
     link2=""
-    ans = search_serpapi(output_string+" animal")
+    ans = search_serpapi(output_string+" plant")
     print(ans)
     if(len(ans)==2):
         link1,link2=ans
@@ -292,7 +299,7 @@ def plants():
     mysql.connection.commit()
 
 
-    return jsonify("animal added successfully"), 200   
+    return jsonify("plant added successfully"), 200   
     # descp = wikipedia.summary(output_string)
     
     # print(descp)
