@@ -1,5 +1,6 @@
 # Ignore the config.py file in the config directory
 Backend/Test2/config.py
+Backend/Test2/config.json
 
 # Other common ignores
 *.pyc
